@@ -31,7 +31,9 @@ Your task is to use Conditional Random Fields to segment Chinese words. For a go
 
 You can use the [CRFsuite](http://www.chokkan.org/software/crfsuite/) library to implement the model; several files have also been provided to help you implement the system.
 
-First, install CRFsuite by following the instructions found [here](http://www.chokkan.org/software/crfsuite/manual.html#id489766). Then, read through [the tutorial](http://www.chokkan.org/software/crfsuite/tutorial.html) to get an idea of how the library works. You can then fill out the commands to train the model, and to run it on the test set in `crf.py`.
+First, install CRFsuite by following the instructions found [here](http://www.chokkan.org/software/crfsuite/manual.html#id489766). Then, read through [the tutorial](http://www.chokkan.org/software/crfsuite/tutorial.html) to get an idea of how the library works. You can then fill out the commands to train the model, and to run it on the test set in `crf.py`. if your system is OS X, you can install CRFsuite quickly by homebrew if you already install homebrew on your system. just run 
+`brew tap homebrew/science`
+`brew install crfsuite`
 
 Next, pose word segmentation as a tagging problem by assigning a tag to each character based on whether it begins a new word (B) or does not begin a new word (N). The segmenting problem becomes a problem of assigning tags to the characters of a test sequence. In order to view the problem this way, we first need to tag the training set; to do so, fill in the functions found in `crf_formatter.py`. The CRFsuite tutorial is again helpful in understanding this step.
 
