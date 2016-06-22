@@ -40,6 +40,11 @@ def train(model, trainset):
 	# generate features for the tagged set
 	features.generate(training_tagfile.name, training_features.name)
 
+        dirname = os.path.dirname(model)
+        if not os.path.exists(dirname):
+            os.makedirs(dirname)
+
+
 	# Call CRFSuite using the command line to train a CRF model.
 	cmd = ["crfsuite",  "learn", "-m", model, training_features.name]
 	call(cmd)
@@ -62,7 +67,7 @@ def test(model, testset, outfile):
 	crf_formatter.text_to_tagged(testset, testing_tagfile.name)
 	# generate features for the tagged file
 	features.generate(testing_tagfile.name, testing_features.name)
-	
+
 	# Generate predicted tags using the trained model
 	sys.stderr.write("Predicting tags.\n")
 
@@ -70,11 +75,11 @@ def test(model, testset, outfile):
 	# using your trained CRF model.
 	cmd = ["crfsuite",  "tag", "-m", model, testing_features.name]
 	predictions, _ = Popen(cmd, stdout=PIPE).communicate()
-	
+
 	# pair the testing characters with their predicted tags
 	# convert the tagged file back to lines of text
 	crf_formatter.predictions_to_text(testing_tagfile.name, predictions.split('\n'), outfile=outfile)
-	
+
 	# clear the temp files
 	os.unlink(testing_tagfile.name)
 	os.unlink(testing_features.name)
@@ -93,20 +98,20 @@ def evaluate(dictionary, targets, predictions):
 # Parse command-line arguments and run.
 if __name__ == '__main__':
 	optparser = optparse.OptionParser()
-	optparser.add_option("-t", "--training_filename", dest="trainset", 
+	optparser.add_option("-t", "--training_filename", dest="trainset",
 		default="data/training_seg.utf8", help="Training data filename.")
-	optparser.add_option("-s", "--testing_filename", dest="testset", 
+	optparser.add_option("-s", "--testing_filename", dest="testset",
 		default="data/test_unseg.utf8", help="Unsegmented Testing data filename.")
-	optparser.add_option("-p", "--predictions_filename", dest="predfile", 
+	optparser.add_option("-p", "--predictions_filename", dest="predfile",
 		default="output/predictions.utf8", help="Desired filename for test set predictions.")
-	optparser.add_option("-m", "--model_filename", dest="model", 
+	optparser.add_option("-m", "--model_filename", dest="model",
 		default="models/crf.model", help="Desired filename for model.")
-	optparser.add_option("-d", "--dictionary", dest="dictionary", 
+	optparser.add_option("-d", "--dictionary", dest="dictionary",
 		default="data/dict.utf8", help="Dictionary used for testing.")
-	optparser.add_option("-g", "--targets_filename", dest="targets", 
+	optparser.add_option("-g", "--targets_filename", dest="targets",
 		default="data/test_seg.utf8", help="Target (truth) segmented test set.")
 	(opts,_) = optparser.parse_args()
 
-	run(opts.trainset, opts.testset, opts.predfile, 
+	run(opts.trainset, opts.testset, opts.predfile,
 		opts.model, opts.dictionary, opts.targets)
-	
+

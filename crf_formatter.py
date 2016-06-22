@@ -3,14 +3,14 @@
 ### crf_formatter.py
 # Converts files to / from lines of text and TAGGED formats.
 # Sean Welleck | 2014
-# 
+#
 # The Text format is one sentence per line, with characters and punctuation
 # separated by spaces. The is the format specified by the SIGHAN competition:
 # (http://www.sighan.org/bakeoff2005/data/instructions.php.htm).
-# 
+#
 # The Tagged format is one character and one tag per line, separated by a space.
-# A blank line separates sentences.	
-# 
+# A blank line separates sentences.
+#
 import codecs
 import optparse
 import sys
@@ -19,8 +19,8 @@ import tempfile
 
 # Converts a corpus in SIGHAN format into a TAGGED file.
 # Input (Text) Format:
-#    为  祖国  守岁  
-#    编者  的  话 
+#    为  祖国  守岁
+#    编者  的  话
 #    ...
 #  One sentence per line, words separated by a space.
 #
@@ -65,6 +65,9 @@ def text_to_tagged(corpus, outfile):
 #   outfile - desired filename of text data
 def tagged_to_text(tagged, outfile):
 	sys.stderr.write("Converting TAGGED to SIGHAN text format.\n")
+        dirname = os.path.dirname(outfile)
+        if not os.path.exists(dirname):
+            os.makedirs(dirname)
 	out = codecs.open(outfile, 'wb', encoding='utf-8')
 	start = True
 	for line in codecs.open(tagged, 'r', encoding='utf-8'):
@@ -84,7 +87,7 @@ def tagged_to_text(tagged, outfile):
 
 # Pairs each character from the test set with its predicted tag.
 # Then converts the (character, tag) pairs into a SIGHAN text format.
-# 
+#
 # test_tags - tagged test set with placeholder tags (one [char tag] pair per line)
 # pred_tags - list of predicted tags output by CRFSuite, e.g. ['B', 'N', ... ]
 # outfile   - desired name for segmented output text file.
